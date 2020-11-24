@@ -1,0 +1,14 @@
+{
+  "name": "numeric-store",
+  "version": "1.0.0",
+  "description": "url monitoring ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Philippe Lanougadere",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
