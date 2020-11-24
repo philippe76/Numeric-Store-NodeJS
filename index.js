@@ -22,11 +22,12 @@ const urlWatcher = (req, res) => {
  
 };
 
+const dynamicWatcher = setInterval(urlWatcher, 3000)
 
 
 
 app.get('/', (req, res) => {
-    urlWatcher()
+    dynamicWatcher()
     res.status(200).json({message: 'Watching URL'})
 })
 
