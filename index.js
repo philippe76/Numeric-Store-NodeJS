@@ -11,6 +11,13 @@ app.set('view engine', 'ejs')
 const watchedUrl = 'https://dev.fractal-it.fr:8443d/fake_health_test?dynamic=true';
 
 
+// PROMISE TO CATCH URLWATCHER RESULT
+
+/**
+ * JE N'ARRIVE PAS A RECUPERER LE RESULTAT DE LA PROMISE POUR L'AFFICHER 
+ */
+
+
 // const urlWatcher = () => {  
 
 //     return new Promise((resolve, reject) =>{
@@ -47,8 +54,6 @@ const urlWatcher = (req, res) => {
   })
  
 };
-
-
 
 
 // REPEAT REGULARLY FUNCTION CALL    
