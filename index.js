@@ -6,76 +6,43 @@ app.use(express.json());
 app.use(express.static('public'));
 app.set('view engine', 'ejs')
 
-
-// FUNCTION TO WATCH URL
-const watchedUrl = 'https://dev.fractal-it.fr:8443d/fake_health_test?dynamic=true';
+const url = 'https://dev.fractal-it.fr:84453/fake_health_test?dynamic=true';
 
 
-// PROMISE TO CATCH URLWATCHER RESULT
 
-/**
- * JE N'ARRIVE PAS A RECUPERER LE RESULTAT DE LA PROMISE POUR L'AFFICHER 
- */
+// FUNCTION FOR WATCHING URL
+let message;
 
-
-// const urlWatcher = () => {  
-
-//     return new Promise((resolve, reject) =>{
-//         let result = '';
-//         request(watchedUrl, (error, response) => {
-//             if (!error && response.statusCode == 200) {
-//                 message = `status is ${response.statusMessage}`;
-//                 details = JSON.stringify(response, null, 2);
-//                 result = message
-//             } else {
-//                 message = `Error : status is ${response.statusMessage}`;
-//                 details = JSON.stringify(response, null, 2);
-//                 result = message
-//             }
-//             console.log(message);
-//             console.log(details);
-//           })
-
-//           resolve(result)        
-//     }) 
-// }
-
-const urlWatcher = (req, res) => {  
-  request(watchedUrl, (error, response) => {
-    if (!error && response.statusCode == 200) {
-        message = `status is ${response.statusMessage}`;
-        details = JSON.stringify(response, null, 2);
-    } else {
-        message = `Error : status is ${response.statusMessage}`;
-        details = JSON.stringify(response, null, 2);
-        console.log(message);
-        console.log(details);
-    }
-  })
- 
-};
+function urlWatcher() {  
+    return new Promise((resolve, reject) => {
+          request(url, (error, response) => {
+            if (!error) {
+                message = `Success: status is ${response.statusMessage}`;   
+                resolve(message)             
+            } else {
+                message = `Error : status is ${error.statusMessage}`;  
+                resolve(message)                    
+            }
+        })      
+    }) 
+}
 
 
-// REPEAT REGULARLY FUNCTION CALL    
-// const dynamicWatcher = setInterval(urlWatcher, 3000)
 
 
 // APP MAIN ROUTE
 app.get('/', (req, res) => {
-    res.render('home');
+    res.render('home');    
 })
 
 
 // WATCHING URL ROUTE
 app.post('/watching',(req, res) => {
-
-//   const getStatus = async function() {
-//       let result = await urlWatcher();
-//   }  
-//   console.log(getStatus()); 
-
-    setInterval(urlWatcher, 3000)
-    res.render('watch', {url: watchedUrl, statusUrl: urlWatcher.statusCode });
+    setInterval(urlWatcher, 3000);
+    async function getThisPromise() {
+        message = await urlWatcher()
+    };    
+    res.render('watch', {url: url, urlStatus: message });
 })
 
 
