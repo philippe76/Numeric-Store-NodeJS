@@ -8,20 +8,48 @@ app.set('view engine', 'ejs')
 
 
 // FUNCTION TO WATCH URL
+const watchedUrl = 'https://dev.fractal-it.fr:8443d/fake_health_test?dynamic=true';
+
+
+// const urlWatcher = () => {  
+
+//     return new Promise((resolve, reject) =>{
+//         let result = '';
+//         request(watchedUrl, (error, response) => {
+//             if (!error && response.statusCode == 200) {
+//                 message = `status is ${response.statusMessage}`;
+//                 details = JSON.stringify(response, null, 2);
+//                 result = message
+//             } else {
+//                 message = `Error : status is ${response.statusMessage}`;
+//                 details = JSON.stringify(response, null, 2);
+//                 result = message
+//             }
+//             console.log(message);
+//             console.log(details);
+//           })
+
+//           resolve(result)        
+//     }) 
+// }
+
 const urlWatcher = (req, res) => {  
-  request('https://dev.fractal-it.fr:8443/fake_health_test?dynamic=true   ', (error, response) => {
+  request(watchedUrl, (error, response) => {
     if (!error && response.statusCode == 200) {
         message = `status is ${response.statusMessage}`;
         details = JSON.stringify(response, null, 2);
     } else {
         message = `Error : status is ${response.statusMessage}`;
         details = JSON.stringify(response, null, 2);
+        console.log(message);
+        console.log(details);
     }
-    console.log(message);
-    console.log(details);
   })
  
 };
+
+
+
 
 // REPEAT REGULARLY FUNCTION CALL    
 // const dynamicWatcher = setInterval(urlWatcher, 3000)
@@ -29,13 +57,20 @@ const urlWatcher = (req, res) => {
 
 // APP MAIN ROUTE
 app.get('/', (req, res) => {
-    // dynamicWatcher()
-    // res.status(200).json({message: 'Watching URL'});
     res.render('home');
 })
 
+
+// WATCHING URL ROUTE
 app.post('/watching',(req, res) => {
-    res.render('watch');
+
+//   const getStatus = async function() {
+//       let result = await urlWatcher();
+//   }  
+//   console.log(getStatus()); 
+
+    setInterval(urlWatcher, 3000)
+    res.render('watch', {url: watchedUrl, statusUrl: urlWatcher.statusCode });
 })
 
 
