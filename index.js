@@ -2,11 +2,12 @@ const express = require('express');
 const request = require('request');
 
 const app = express();
-const port = 8080;
+app.use(express.json());
+app.use(express.static('public'));
+app.set('view engine', 'ejs')
 
 
-
-
+// FUNCTION TO WATCH URL
 const urlWatcher = (req, res) => {  
   request('https://dev.fractal-it.fr:8443/fake_health_test?dynamic=true   ', (error, response) => {
     if (!error && response.statusCode == 200) {
@@ -22,14 +23,22 @@ const urlWatcher = (req, res) => {
  
 };
 
-const dynamicWatcher = setInterval(urlWatcher, 3000)
+// REPEAT REGULARLY FUNCTION CALL    
+// const dynamicWatcher = setInterval(urlWatcher, 3000)
 
 
-
+// APP MAIN ROUTE
 app.get('/', (req, res) => {
-    dynamicWatcher()
-    res.status(200).json({message: 'Watching URL'})
+    // dynamicWatcher()
+    // res.status(200).json({message: 'Watching URL'});
+    res.render('home');
+})
+
+app.post('/watching',(req, res) => {
+    res.render('watch');
 })
 
 
-app.listen(port, () => console.log(`listenning on port ${port}`))
+// APP LISTENNING PORT
+const PORT = 8080;
+app.listen(PORT, () => console.log(`listenning on port ${PORT}`))
